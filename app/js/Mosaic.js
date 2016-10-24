@@ -1,3 +1,5 @@
+//Mosaic.js v1.0.0
+
 (function ($) {
     var methods = {
         init: function () {
@@ -7,7 +9,7 @@
                 var $this = $(this);
                 $this.append('<div class="mosaic-container"><input type="number" name="quantity" min="1" max="200" placeholder="N" class="img_n"><input type="text" placeholder="URL" class="img_url"><button class="create">Create</button><br><hr><div class="zoom_block"><button class="add_zoom">+</button><input type="text" class="zoon_now" value="100%"><button class="remove_zoom">-</button></div><div class="block_rezult"></div></div>');
 
-                var Mosaic = {};
+                var Mosaic = {}; 
 
                 Mosaic.create = function (elem, n, url) {
                     var $this_in = elem;

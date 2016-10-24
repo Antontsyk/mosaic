@@ -18,8 +18,7 @@ var path_scss = './app/scss';
 var path_css = './dist/css';
 var path_app_js = './app/js';
 var path_dist_js = './dist/js';
-var path_app_images = './app/images';
-var path_dist_images = './dist/images';
+
 
 // Проверка ошибок в скриптах
 gulp.task('lint', function () {
@@ -27,23 +26,10 @@ gulp.task('lint', function () {
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
-// minify images
-gulp.task('images', function () {
-    return gulp.src(path_app_images + '/**/*.{jpg,png}')
-        .pipe(cache(imagemin({
-            optimizationLevel: 5,
-            progressive: true,
-            interlaced: true
-        })))
-        .pipe(size({
-            title: 'size of images'
-        }))
-        .pipe(gulp.dest(path_dist_images));
-});
 
 // Чистим директорию назначения и делаем ребилд, чтобы удаленные из проекта файлы не остались
 gulp.task('clean', function() {
-  return gulp.src([path_dist_images, path_dist_js, path_css], {read: false})
+  return gulp.src([path_dist_js, path_css], {read: false})
     .pipe(clean());
 });
 
@@ -79,11 +65,10 @@ gulp.task('sass', function () {
 
 gulp.task('sass:watch', function () {
     gulp.watch(path_scss + '/**/*.scss', ['sass']);
-    gulp.watch(path_app_js + '/**/*.js', ['lint', 'scripts']);
-    gulp.watch(path_app_images + '/**/*', ['images']);
+    gulp.watch(path_app_js + '/**/*.js', ['lint', 'scripts']);    
 });
 
 //gulp.task('default', ['sass:watch']);
 gulp.task('default', ['clean','sass:watch'], function() {
-    gulp.start('sass', 'scripts', 'images');
+    gulp.start('sass', 'scripts');
 });
