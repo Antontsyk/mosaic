@@ -15,7 +15,7 @@ return b?(parseFloat(Sa(a,"marginLeft"))||(n.contains(a.ownerDocument,a)?a.getBo
                 var $this = $(this);
                 $this.append('<div class="mosaic-container"><input type="number" name="quantity" min="1" max="200" placeholder="N" class="img_n"><input type="text" placeholder="URL" class="img_url"><button class="create">Create</button><br><hr><div class="zoom_block"><button class="add_zoom">+</button><input type="text" class="zoon_now" value="100%"><button class="remove_zoom">-</button></div><div class="block_rezult"></div></div>');
 
-                var Mosaic = {}; 
+                var Mosaic = {};
 
                 Mosaic.create = function (elem, n, url) {
                     var $this_in = elem;
@@ -37,6 +37,8 @@ return b?(parseFloat(Sa(a,"marginLeft"))||(n.contains(a.ownerDocument,a)?a.getBo
                             $this_in.find('.Mosaic-body').find("tr.row-" + i).append('<td><img src="' + url + '" alt="" ></td>')
                         }
                     }
+                    var zoom_now = parseInt($this_in.find('.zoon_now').val());
+                    Mosaic.zoom($this_in, zoom_now/100);
                     $this_in.find('.Mosaic-body').on('mouseover', 'td', function () {
                         $(this).animate({
                             opacity: 0
