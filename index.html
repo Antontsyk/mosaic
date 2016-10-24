@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+    <title>mosaic</title>
+    <link href="./dist/css/style.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->    
+</head>
+
+<body>
+   <div class="block_in"></div>    
+   <div class="block_in_2"></div>    
+   <div class="block_in_3"></div>       
+</body>
+<script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+<script>
+    $(document).ready(function(){
+        $('.block_in').Mosaic();
+        $('.block_in_2').Mosaic();
+        $('.block_in_3').Mosaic();
+    })
+</script>
+
+</html>
