@@ -11,7 +11,7 @@ return b?(parseFloat(Sa(a,"marginLeft"))||(n.contains(a.ownerDocument,a)?a.getBo
                 $(window).bind('resize.Mosaic', methods.reposition);
 
                 var $this = $(this);
-                $this.append('<div class="mosaic-container"><input type="number" name="quantity" min="1" max="200" placeholder="N" class="img_n"><input type="text" placeholder="URL" class="img_url"><button class="create">Create</button><br><hr><button class="add_zoom">+</button><input type="text" class="zoon_now" value="100"><button class="remove_zoom">-</button><div class="block_rezult"></div></div>');
+                $this.append('<div class="mosaic-container"><input type="number" name="quantity" min="1" max="200" placeholder="N" class="img_n"><input type="text" placeholder="URL" class="img_url"><button class="create">Create</button><br><hr><div class="zoom_block"><button class="add_zoom">+</button><input type="text" class="zoon_now" value="100%"><button class="remove_zoom">-</button></div><div class="block_rezult"></div></div>');
 
                 var Mosaic = {};
 
@@ -48,16 +48,11 @@ return b?(parseFloat(Sa(a,"marginLeft"))||(n.contains(a.ownerDocument,a)?a.getBo
                 }
 
                 Mosaic.zoom = function (el, zoom) {
-                    var zoom_add = zoom * 20;
-                    $(el).find('.Mosaic-body tr td').each(function () {
-                        $(this).css({
-                            'width': zoom_add,
-                            'height': zoom_add
-                        });
-                    });
+                    $(el).find('.Mosaic-body').css('transform', 'scale(' + zoom + ')');
+
                 }
 
-                $('.create').click(function () {
+                $this.find('.create').click(function () {
                     var container = $(this).parents('.mosaic-container');
                     var count = $(container).find('.img_n').val();
                     var img_url = $(container).find('.img_url').val();
@@ -66,14 +61,14 @@ return b?(parseFloat(Sa(a,"marginLeft"))||(n.contains(a.ownerDocument,a)?a.getBo
 
                 $this.find('.add_zoom').click(function () {
                     var container = $(this).parents('.mosaic-container');
-                    
+
                     var zoom_now = parseInt($(container).find('.zoon_now').val());
                     var zoom_up = Math.round(zoom_now * 1.25);
                     if (zoom_up > 1000) {
                         zoom_up = 1000;
-                    }                    
+                    }
                     Mosaic.zoom(container, zoom_up / 100);
-                    $(container).find('.zoon_now').val(zoom_up);
+                    $(container).find('.zoon_now').val(zoom_up + "%");
                 });
 
                 $this.find('.remove_zoom').click(function () {
@@ -82,11 +77,20 @@ return b?(parseFloat(Sa(a,"marginLeft"))||(n.contains(a.ownerDocument,a)?a.getBo
                     var zoom_up = Math.round(zoom_now * 0.8);
                     if (zoom_up <= 10) {
                         var zoom_up = 10;
-                    }                    
+                    }
                     Mosaic.zoom(container, zoom_up / 100);
-                    $(container).find('.zoon_now').val(zoom_up);
+                    $(container).find('.zoon_now').val(zoom_up + "%");
                 });
             });
+        },
+        destroy: function () {
+
+            return this.each(function () {
+                $(window).unbind('.Mosaic');
+                var $this = $(this);
+                $this.html('');
+            })
+
         }
     }
     $.fn.Mosaic = function (method) {
