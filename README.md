@@ -1,7 +1,7 @@
 "# mosaic" 
 
-###for cterte:
+##For creating:
 ###
-###1. include Jquery
+###1. Include library Jquery
 ###
-###2. $(element).Mosaic();
+###2. Create element and call the plugin  $(element).Mosaic();
