@@ -503,8 +503,8 @@ th {
 }
 .mosaic-container .block_rezult {
   float: left;
-  width: 500px;
-  height: 500px;
+  width: 350px;
+  height: 350px;
   overflow: auto;
 }
 .mosaic-container .block_rezult:after {

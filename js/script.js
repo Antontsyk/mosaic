@@ -1,3 +1,12 @@
+//Mosaic.js v1.0.0
+var validateUrl = function (url) {
+    if (!/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?(\w+.(JPG|JPEG|PNG|GIF|jpg|jpeg|png|gif))$/.test(url)) {
+        return false
+    } else {
+        return true
+    }
+};
+
 (function ($) {
     var methods = {
         init: function () {
@@ -5,40 +14,54 @@
                 $(window).bind('resize.Mosaic', methods.reposition);
 
                 var $this = $(this);
+
+                //
                 $this.append('<div class="mosaic-container"><input type="number" name="quantity" min="1" max="200" placeholder="N" class="img_n"><input type="text" placeholder="URL" class="img_url"><button class="create">Create</button><br><hr><div class="zoom_block"><button class="add_zoom">+</button><input type="text" class="zoon_now" value="100%"><button class="remove_zoom">-</button></div><div class="block_rezult"></div></div>');
 
                 var Mosaic = {};
 
-                Mosaic.create = function (elem, n, url) {
+                Mosaic.create = function (elem, count_line, url) {
                     var $this_in = elem;
-                    var n_now = parseInt($this_in.find('.img_n').val());
-                    if (n_now < 1 || n_now > 200 || !n_now) {
+                    var count_in_line = parseInt($this_in.find('.img_n').val());
+                    var zoom_now = parseInt($this_in.find('.zoon_now').val());
+                    var block_rezalt = $this_in.find('.block_rezult');
+                    var url_img = $this_in.find('.img_url').val();
+                    var Mosaic_body = null;
+
+                    if (count_in_line < 1 || count_in_line > 200 || !count_in_line) {
                         alert('N will be in [1,,200]');
                         return
                     }
 
-                    if (!/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?(\w+.(JPG|JPEG|PNG|GIF|jpg|jpeg|png|gif))$/.test($this_in.find('.img_url').val())) {
-                        alert('url image no corect!!!');
+                    if (!validateUrl(url_img)) {
+                        alert('url image incorrect!');
                         return
                     }
-                    $this_in.find('.block_rezult').html('');
-                    $this_in.find('.block_rezult').append('<table class="Mosaic-body"><table>');
-                    for (var i = 0; i < n; i++) {
-                        $this_in.find('.Mosaic-body').append("<tr class='row-" + i + "'></tr>");
-                        for (var j = 0; j < n; j++) {
-                            $this_in.find('.Mosaic-body').find("tr.row-" + i).append('<td><img src="' + url + '" alt="" ></td>')
+
+                    block_rezalt.html('');
+                    block_rezalt.append('<table class="Mosaic-body"><table>');
+                    Mosaic_body = $this_in.find('.Mosaic-body');
+
+                    for (var i = 0; i < count_line; i++) {
+                        Mosaic_body.append("<tr class='row-" + i + "'></tr>");
+                        for (var j = 0; j < count_line; j++) {
+                            Mosaic_body.find("tr.row-" + i).append('<td><img src="' + url + '" alt="" ></td>')
                         }
                     }
-                    $this_in.find('.Mosaic-body').on('mouseover', 'td', function () {
-                        $(this).animate({
-                            opacity: 0
-                        }, 0);
-                    });
-                    $this_in.find('.Mosaic-body td').mouseout(function () {
-                        $(this).animate({
-                            opacity: 1
-                        }, 1000);
-                    });
+
+                    Mosaic.zoom($this_in, zoom_now / 100);
+
+                    Mosaic_body
+                        .on('mouseover', 'td', function () {
+                            $(this).animate({
+                                opacity: 0
+                            }, 0);
+                        })
+                        .on('mouseout', 'td', function () {
+                            $(this).animate({
+                                opacity: 1
+                            }, 1000);
+                        });
                 }
 
                 Mosaic.zoom = function (el, zoom) {
