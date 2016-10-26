@@ -11,7 +11,7 @@ var validateUrl = function (url) {
     var methods = {
         init: function () {
             return this.each(function () {
-                $(window).bind('resize.Mosaic', methods.reposition);
+                $(window).bind('resize.Mosaic', methods.init);
 
                 var $this = $(this);
 
@@ -116,7 +116,7 @@ var validateUrl = function (url) {
         } else if (typeof method === 'object' || !method) {
             return methods.init.apply(this, arguments);
         } else {
-            $.error('Метод с именем ' + method + ' не существует для jQuery.tooltip');
+            $.error('Method with name ' + method + ' does not exist for jQuery.Mosaic');
         }
 
     };

@@ -5,50 +5,69 @@ return b?(parseFloat(Sa(a,"marginLeft"))||(n.contains(a.ownerDocument,a)?a.getBo
 })}),n.each({Height:"height",Width:"width"},function(a,b){n.each({padding:"inner"+a,content:b,"":"outer"+a},function(c,d){n.fn[d]=function(d,e){var f=arguments.length&&(c||"boolean"!=typeof d),g=c||(d===!0||e===!0?"margin":"border");return Y(this,function(b,c,d){var e;return n.isWindow(b)?b.document.documentElement["client"+a]:9===b.nodeType?(e=b.documentElement,Math.max(b.body["scroll"+a],e["scroll"+a],b.body["offset"+a],e["offset"+a],e["client"+a])):void 0===d?n.css(b,c,g):n.style(b,c,d,g)},b,f?d:void 0,f,null)}})}),n.fn.extend({bind:function(a,b,c){return this.on(a,null,b,c)},unbind:function(a,b){return this.off(a,null,b)},delegate:function(a,b,c,d){return this.on(b,a,c,d)},undelegate:function(a,b,c){return 1===arguments.length?this.off(a,"**"):this.off(b,a||"**",c)}}),n.fn.size=function(){return this.length},n.fn.andSelf=n.fn.addBack,"function"==typeof define&&define.amd&&define("jquery",[],function(){return n});var nc=a.jQuery,oc=a.$;return n.noConflict=function(b){return a.$===n&&(a.$=oc),b&&a.jQuery===n&&(a.jQuery=nc),n},b||(a.jQuery=a.$=n),n});
 
 //Mosaic.js v1.0.0
+var validateUrl = function (url) {
+    if (!/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?(\w+.(JPG|JPEG|PNG|GIF|jpg|jpeg|png|gif))$/.test(url)) {
+        return false
+    } else {
+        return true
+    }
+};
 
 (function ($) {
     var methods = {
         init: function () {
             return this.each(function () {
-                $(window).bind('resize.Mosaic', methods.reposition);
+                $(window).bind('resize.Mosaic', methods.init);
 
                 var $this = $(this);
+
+                //
                 $this.append('<div class="mosaic-container"><input type="number" name="quantity" min="1" max="200" placeholder="N" class="img_n"><input type="text" placeholder="URL" class="img_url"><button class="create">Create</button><br><hr><div class="zoom_block"><button class="add_zoom">+</button><input type="text" class="zoon_now" value="100%"><button class="remove_zoom">-</button></div><div class="block_rezult"></div></div>');
 
                 var Mosaic = {};
 
-                Mosaic.create = function (elem, n, url) {
+                Mosaic.create = function (elem, count_line, url) {
                     var $this_in = elem;
-                    var n_now = parseInt($this_in.find('.img_n').val());
-                    if (n_now < 1 || n_now > 200 || !n_now) {
+                    var count_in_line = parseInt($this_in.find('.img_n').val());
+                    var zoom_now = parseInt($this_in.find('.zoon_now').val());
+                    var block_rezalt = $this_in.find('.block_rezult');
+                    var url_img = $this_in.find('.img_url').val();
+                    var Mosaic_body = null;
+
+                    if (count_in_line < 1 || count_in_line > 200 || !count_in_line) {
                         alert('N will be in [1,,200]');
                         return
                     }
 
-                    if (!/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?(\w+.(JPG|JPEG|PNG|GIF|jpg|jpeg|png|gif))$/.test($this_in.find('.img_url').val())) {
-                        alert('url image no corect!!!');
+                    if (!validateUrl(url_img)) {
+                        alert('url image incorrect!');
                         return
                     }
-                    $this_in.find('.block_rezult').html('');
-                    $this_in.find('.block_rezult').append('<table class="Mosaic-body"><table>');
-                    for (var i = 0; i < n; i++) {
-                        $this_in.find('.Mosaic-body').append("<tr class='row-" + i + "'></tr>");
-                        for (var j = 0; j < n; j++) {
-                            $this_in.find('.Mosaic-body').find("tr.row-" + i).append('<td><img src="' + url + '" alt="" ></td>')
+
+                    block_rezalt.html('');
+                    block_rezalt.append('<table class="Mosaic-body"><table>');
+                    Mosaic_body = $this_in.find('.Mosaic-body');
+
+                    for (var i = 0; i < count_line; i++) {
+                        Mosaic_body.append("<tr class='row-" + i + "'></tr>");
+                        for (var j = 0; j < count_line; j++) {
+                            Mosaic_body.find("tr.row-" + i).append('<td><img src="' + url + '" alt="" ></td>')
                         }
                     }
-                    var zoom_now = parseInt($this_in.find('.zoon_now').val());
-                    Mosaic.zoom($this_in, zoom_now/100);
-                    $this_in.find('.Mosaic-body').on('mouseover', 'td', function () {
-                        $(this).animate({
-                            opacity: 0
-                        }, 0);
-                    });
-                    $this_in.find('.Mosaic-body td').mouseout(function () {
-                        $(this).animate({
-                            opacity: 1
-                        }, 1000);
-                    });
+
+                    Mosaic.zoom($this_in, zoom_now / 100);
+
+                    Mosaic_body
+                        .on('mouseover', 'td', function () {
+                            $(this).animate({
+                                opacity: 0
+                            }, 0);
+                        })
+                        .on('mouseout', 'td', function () {
+                            $(this).animate({
+                                opacity: 1
+                            }, 1000);
+                        });
                 }
 
                 Mosaic.zoom = function (el, zoom) {
@@ -103,7 +122,7 @@ return b?(parseFloat(Sa(a,"marginLeft"))||(n.contains(a.ownerDocument,a)?a.getBo
         } else if (typeof method === 'object' || !method) {
             return methods.init.apply(this, arguments);
         } else {
-            $.error('Метод с именем ' + method + ' не существует для jQuery.tooltip');
+            $.error('Method with name ' + method + ' does not exist for jQuery.Mosaic');
         }
 
     };
